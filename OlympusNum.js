@@ -10,6 +10,7 @@
             // An ordinal is represented as either 0 or ψ_n(b)+c where b, c are other ordinals and n is an integer.
             // The former is type zero, with this.type = 0, this.parts = [].
             // The latter is type one, with this.type = 1, this.parts = [[n,b]] + c.parts.
+            // For most purposes, we want the ordinals to be in Buchholz ordinal normal form, but that'll come later.
             
             if (v == null) {
                 this.type = 0;
@@ -18,7 +19,7 @@
                 this.type = v.type;
                 this.parts = v.parts;
             } else if (typeof v == "string") {
-                // Valid strings are either 0 or p_n(b)+c. We match these via RegEx.
+                // Valid strings are either 0, p_n(b) or p_n(b)+c. We match these via RegEx.
                 const pattern2 = /p\_\d+\(\d*\)/;
                 const pattern1 = /p\_\d+\(\d*\)\+\d*/;
                 if (v == "0") {
