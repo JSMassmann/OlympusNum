@@ -7,15 +7,26 @@
         }
 
         constructor(v) {
+            // An ordinal is represented as either 0 or ψ_n(b)+c where b, c are other ordinals and n is an integer.
+            // The former is type zero, with this.type = 0, this.parts = [].
+            // The latter is type one, with this.type = 1, this.parts = [[n,b]] + c.parts.
+            
             if (v == null) {
-                // Type 0 = zero, Type 1 = sum, Type 2 = additively principal.
-                // Parts is empty for types 0 and 2, represents the individual terms in the sum for type 1.
-                // Index is null for types 0 and 1, represents the index of the psi-function for type 2.
-                // Input is null for types 0 and 1, represents the input to the psi-function for type 2.
                 this.type = 0;
                 this.parts = [];
-                this.index = null;
-                this.input = null;
+            } else if (v instanceof Ordinal) {
+                this.type = v.type;
+                this.parts = v.parts;
+            } else if (typeof v == "string") {
+                // Valid strings are either 0 or p_n(b)+c. We match these via RegEx.
+                const pattern2 = /p\_\d+\(\d*\)/;
+                const pattern1 = /p\_\d+\(\d*\)\+\d*/;
+                if (v == "0") {
+                    this.type = 0;
+                    this.parts = [];
+                } else if (pattern1.test(v) || pattern2.test(v)) {} else {
+                    throw new Error("Invalid string to convert.");
+                }
             }
         }
     }

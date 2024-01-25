@@ -1,5 +1,5 @@
 # OlympusNum
-The JavaScript large number library to rule them all. The limit is g_ψ_0(Ω_ω)(9007199254740991) with respect to Buchholz's function.
+The JavaScript large number library to rule them all. The limit is g_ψ_0(Ω_9007199254740991)(10) with respect to Buchholz's function.
 
 # Mechanism
 
