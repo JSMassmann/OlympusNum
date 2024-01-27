@@ -1,3 +1,4 @@
+const Ord = Ordinal.Ord;
 (function (globalScope) {
    "use strict";
 
@@ -7,28 +8,32 @@
         }
 
         constructor(v) {
-            // An ordinal is represented as either 0 or ψ_n(b)+c where b, c are other ordinals and n is an integer.
-            // The former is type zero, with this.type = 0, this.parts = [].
-            // The latter is type one, with this.type = 1, this.parts = [[n,b]] + c.parts.
-            // For most purposes, we want the ordinals to be in Buchholz ordinal normal form, but that'll come later.
-            
-            if (v == null) {
-                this.type = 0;
-                this.parts = [];
-            } else if (v instanceof Ordinal) {
-                this.type = v.type;
-                this.parts = v.parts;
-            } else if (typeof v == "string") {
-                // Valid strings are either 0, p_n(b) or p_n(b)+c. We match these via RegEx.
-                const pattern2 = /p\_\d+\(\d*\)/;
-                const pattern1 = /p\_\d+\(\d*\)\+\d*/;
-                if (v == "0") {
-                    this.type = 0;
-                    this.parts = [];
-                } else if (pattern1.test(v) || pattern2.test(v)) {} else {
-                    throw new Error("Invalid string to convert.");
-                }
-            }
+            // An ordinal is represented as either 0, or ψ_n(α)*k+β. n, k are stored as bigints.
+           if(v==null) {
+              this.type = 0;
+           }
+           else if (v instanceof Ordinal){
+              this.type = _.cloneDeep(v.type);
+              this.sub = _.cloneDeep(v.sub);
+              this.arg = _.cloneDeep(v.arg);
+              this.coef = _.cloneDeep(v.coef);
+              this.add = _.cloneDeep(v.add);
+           }
+           else if (typeof(v)=='bigint'){
+              if(v==0n){this.type=0;}
+              else{
+                 this.type=1;
+                 this.sub=0n; // should this be changed? Should we go up to EBO?
+                 this.arg=Ord();
+                 this.coef=v;
+                 this.add=Ord();
+              }
+           }
+           else if (typeof(v)=='number'){
+              this=Ord(BigInt(v));
+           }
+           else if (typeof(v)=='string'){
+           }
         }
     }
 
