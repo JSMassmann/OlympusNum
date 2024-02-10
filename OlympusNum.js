@@ -1,4 +1,3 @@
-const Ord = Ordinal.Ord;
 (function (globalScope) {
    "use strict";
 
@@ -8,32 +7,46 @@ const Ord = Ordinal.Ord;
         }
 
         constructor(v) {
-            // An ordinal is represented as either 0, or ψ_n(α)*k+β. n, k are stored as bigints.
-           if(v==null) {
-              this.type = 0;
-           }
-           else if (v instanceof Ordinal){
-              this.type = _.cloneDeep(v.type);
-              this.sub = _.cloneDeep(v.sub);
-              this.arg = _.cloneDeep(v.arg);
-              this.coef = _.cloneDeep(v.coef);
-              this.add = _.cloneDeep(v.add);
-           }
-           else if (typeof(v)=='bigint'){
-              if(v==0n){this.type=0;}
-              else{
-                 this.type=1;
-                 this.sub=0n; // should this be changed? Should we go up to EBO?
-                 this.arg=Ord();
-                 this.coef=v;
-                 this.add=Ord();
-              }
-           }
-           else if (typeof(v)=='number'){
-              this=Ord(BigInt(v));
-           }
-           else if (typeof(v)=='string'){
-           }
+            // An ordinal is represented as either 0, type 0, or ψ_n(α)*k+β, type 1.
+            // n, k are stored as bigints.
+            if (v == null) {
+                this.type = 0;
+                this.sub = null;
+                this.arg = null;
+                this.coef = null;
+                this.add = null;
+            }
+            else if (v instanceof Ordinal){
+                // Shallow or deep clone all the attributes of v.
+                this.type = v.type;
+                this.sub = v.sub;
+                this.arg = structuredClone(v.arg);
+                this.coef = v.coef;
+                this.add = structuredClone(v.add);
+            }
+            else if (typeof(v) == "bigint") {
+                if (v == 0n) {
+                    this.type = 0;
+                    this.sub = null;
+                    this.arg = null;
+                    this.coef = null;
+                    this.add = null;
+                }
+                else {
+                    // 1 = ψ_0(0), and generally n = ψ_0(0)*n.
+                    this.type = 1;
+                    this.sub = 0n;
+                    this.arg = Ordinal.Ord(0);
+                    this.coef = v;
+                    this.add = Ordinal.Ord(0);
+                }
+            }
+            else if (typeof(v) == "number") {
+                this = Ordinal.Ord(BigInt(v));
+            }
+            else if (typeof(v) == "string") {
+                // Numbers are formatted as mantissa-exponent, e.g. 1e10, 1ee3, 3e5.
+            }
         }
     }
 
@@ -51,7 +64,6 @@ const Ord = Ordinal.Ord;
             } else if (v instanceof Olympus) {
                 this.ord = _.cloneDeep(v);
             } else if (typeof v == "string") {
-                // Numbers are formatted as mantissa-exponent, e.g. 1e10, 1ee3, 3e5.
                 // g_w^n(10) = 10^n, g_w^w(10) = 10^10, etc. So we first check how many e's there are, etc.
                 let parts = v.split("e")
             } else if (typeof v == "number") {
