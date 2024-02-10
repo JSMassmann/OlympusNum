@@ -45,7 +45,26 @@
                 this = Ordinal.Ord(BigInt(v));
             }
             else if (typeof(v) == "string") {
-                // Numbers are formatted as mantissa-exponent, e.g. 1e10, 1ee3, 3e5.
+                // Valid strings are either 0, ψ_n(b) or ψ_n(b)+c. We match these via RegEx.
+                const pattern1 = /ψ\_\d+\(.+\)/;
+                const pattern2 = /ψ\_\d+\(.+\)\+.+/;
+                if (v == "0") {
+                    this.type = 0;
+                    this.sub = null;
+                    this.arg = null;
+                    this.coef = null;
+                    this.add = null;
+                }
+                else if (pattern1.test(v)) {
+                    this.type = 1;
+                    this.add = Ordinal.Ord(0);
+                }
+                else if (pattern2.test(v)) {
+                    this.type = 1;
+                }
+                else {
+                    throw new Error("Invalid string to convert.");
+                }
             }
         }
     }
@@ -64,6 +83,7 @@
             } else if (v instanceof Olympus) {
                 this.ord = _.cloneDeep(v);
             } else if (typeof v == "string") {
+                // Numbers are formatted as mantissa-exponent, e.g. 1e10, 1ee3, 3e5.
                 // g_w^n(10) = 10^n, g_w^w(10) = 10^10, etc. So we first check how many e's there are, etc.
                 let parts = v.split("e")
             } else if (typeof v == "number") {
