@@ -47,34 +47,34 @@
                     this = Ordinal.Ord(BigInt(v))
                 }
                 else {
-                    let v=v.replaceAll('ω','ψ_0(1)').replaceAll('*','');
-                    let i=v.indexOf('(');
-                    let j=i;
-                    let p=1;
-                    while(1){
+                    let v = v.replaceAll('ω', 'ψ_0(1)').replaceAll('*', '');
+                    let i = v.indexOf('(');
+                    let j = i;
+                    let p = 1;
+                    while (1) {
                         j++;
-                        if(v[i]=='('){p++;}
-                        if(v[i]==')'){p--;}
-                        if(!p){break;}
+                        if (v[i] == '(') {p++;}
+                        if (v[i] == ')') {p--;}
+                        if (!p) {break;}
                     }
-                    let s=BigInt(v.slice(2,i));
-                    let a=v.slice(i+1,j);
-                    let c=1n;
-                    let b='0';
-                    if(j<v.length-1){
-                        if(a[j+1]=='+'){b=a.slice(j+1);}
-                        else{
-                            if(a.slice(j+1).includes('+')){
-                                c=BigInt(a.slice(j+1,a.indexOf('+')));
-                                b=a.slice(a.indexOf('+')+1);
+                    let s = BigInt(v.slice(2, i));
+                    let a = v.slice(i+1, j);
+                    let c = 1n;
+                    let b = '0';
+                    if(j < v.length-1) {
+                        if (a[j+1] == '+') {b = a.slice(j+1);}
+                        else {
+                            if (a.slice(j+1).includes('+')) {
+                                c = BigInt(a.slice(j+1, a.indexOf('+')));
+                                b = a.slice(a.indexOf('+')+1);
                             }
-                            else{c=BigInt(a.slice(j+1));}
+                            else {c = BigInt(a.slice(j+1));}
                         }
                     }
-                    this.sub=s;
-                    this.arg=Ordinal.Ord(a);
-                    this.coef=c;
-                    this.add=Ordinal.Ord(b);
+                    this.sub = s;
+                    this.arg = Ordinal.Ord(a);
+                    this.coef = c;
+                    this.add = Ordinal.Ord(b);
                 }
             }
         }
