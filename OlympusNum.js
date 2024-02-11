@@ -42,31 +42,29 @@
                 this = Ordinal.Ord(BigInt(v));
             }
             else if (typeof(v) == "string") {
-                // Valid strings are either 0, ψ_n(b) or ψ_n(b)+c. We match these via RegEx.
-                if (/\d/.test(v)) {
-                    this = Ordinal.Ord(BigInt(v))
-                }
+                // Valid strings are either 0, ψ_n(b)k, ψ_n(b)k or ψ_n(b)k+c. We match these via RegEx.
+                if (/\d/.test(v)) {this = Ordinal.Ord(BigInt(v));}
                 else {
-                    let v = v.replaceAll('ω', 'ψ_0(1)').replaceAll('*', '');
-                    let i = v.indexOf('(');
+                    let v = v.replaceAll("ω", "ψ_0(1)").replaceAll("*", ""); // Abbreviate.
+                    let i = v.indexOf("(");
                     let j = i;
                     let p = 1;
-                    while (1) {
+                    while (true) { // Match parentheses.
                         j++;
-                        if (v[i] == '(') {p++;}
-                        if (v[i] == ')') {p--;}
+                        if (v[i] == "(") {p++;}
+                        if (v[i] == ")") {p--;}
                         if (!p) {break;}
                     }
-                    let s = BigInt(v.slice(2, i));
-                    let a = v.slice(i+1, j);
+                    let s = BigInt(v.slice(2, i)); // Subscript of ψ.
+                    let a = v.slice(i+1, j); // Input to ψ.
                     let c = 1n;
-                    let b = '0';
-                    if(j < v.length-1) {
-                        if (a[j+1] == '+') {b = a.slice(j+1);}
+                    let b = "0";
+                    if(j < v.length-1) { // Separates out the cases ψ_n(b)k, ψ_n(b)k and ψ_n(b)k+c.
+                        if (a[j+1] == "+") {b = a.slice(j+1);}
                         else {
-                            if (a.slice(j+1).includes('+')) {
-                                c = BigInt(a.slice(j+1, a.indexOf('+')));
-                                b = a.slice(a.indexOf('+')+1);
+                            if (a.slice(j+1).includes("+")) {
+                                c = BigInt(a.slice(j+1, a.indexOf("+")));
+                                b = a.slice(a.indexOf("+")+1);
                             }
                             else {c = BigInt(a.slice(j+1));}
                         }
