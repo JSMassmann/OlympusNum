@@ -39,7 +39,10 @@
                 }
             }
             else if (typeof(v) == "number") {
-                this = Ordinal.Ord(BigInt(v));
+                this.sub = Ordinal.Ord(BigInt(v)).sub;
+                this.arg = Ordinal.Ord(BigInt(v)).arg;
+                this.coef = Ordinal.Ord(BigInt(v)).coef;
+                this.add = Ordinal.Ord(BigInt(v)).add;
             }
             else if (typeof(v) == "string") {
                 // Valid strings are either 0, ψ_n(b)k, ψ_n(b)k or ψ_n(b)k+c. We match these via RegEx.
