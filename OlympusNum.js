@@ -46,7 +46,7 @@
             }
             else if (typeof(v) == "string") {
                 // Valid strings are either 0, ψ_n(b)k, ψ_n(b)k or ψ_n(b)k+c. We match these via RegEx.
-                if (/\d/.test(v)) {this = Ordinal.Ord(BigInt(v));}
+                if (/\d/.test(v)) {this.sub = Ordinal.Ord(BigInt(v)).sub; this.arg = Ordinal.Ord(BigInt(v)).arg; this.coef = Ordinal.Ord(BigInt(v)).coef; this.add = Ordinal.Ord(BigInt(v)).add;}
                 else {
                     let v = v.replaceAll("ω", "ψ_0(1)").replaceAll("*", ""); // Abbreviate.
                     let i = v.indexOf("(");
